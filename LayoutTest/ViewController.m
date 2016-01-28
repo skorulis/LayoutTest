@@ -61,9 +61,21 @@
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
     [super setEditing:editing animated:animated];
-    [_collectionView performBatchUpdates:^{
-        [_layout invalidateLayout];
-    } completion:nil];
+    
+    UICollectionViewFlowLayout *_layoutNew = [[UICollectionViewFlowLayout alloc] init];
+    self.view.window.userInteractionEnabled = NO; //Interfering with the animation would cause a crash
+    [_collectionView startInteractiveTransitionToCollectionViewLayout:_layoutNew completion:^(BOOL completed, BOOL finished) {
+        _layout = _layoutNew;
+        self.view.window.userInteractionEnabled = YES;
+    }];
+    [_collectionView finishInteractiveTransition];
+    
+    //This doesn't cleanly animate between the 2 layouts
+    /*[_collectionView performBatchUpdates:^{
+        [_collectionView setCollectionViewLayout:_layoutNew animated:YES];
+    } completion:^(BOOL finished) {
+        _layout = _layoutNew;
+    }];*/
     
 }
 
