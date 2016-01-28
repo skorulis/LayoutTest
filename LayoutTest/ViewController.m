@@ -17,7 +17,7 @@
 
 - (instancetype)init {
     self = [super init];
-    self.title = @"TEST";
+    self.title = @"Layout Test";
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     return self;
 }
